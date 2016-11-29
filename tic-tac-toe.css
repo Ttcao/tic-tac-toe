@@ -1,0 +1,7 @@
+.game-tile {
+  width: 150px;
+  height: 150px;
+  border: 1px black solid;
+  display: inline-block;
+
+}
