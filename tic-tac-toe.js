@@ -17,36 +17,41 @@ var placeMark = function(event) {
     var index = clickedElement.getAttribute('value');
     placeValue(index);
     numOfturns++;
-    event.target.innerHTML = '<img src="images/X-mark.png" alt="X"/>';
+    event.target.innerHTML = '<img src="images/pacman.png" alt="pacman"/>';
 
     if (numOfturns % 2 == 0) {
-      event.target.innerHTML = '<img src="images/O-mark.png" alt="O"/>';
+        event.target.innerHTML = '<img src="images/ghost.png" alt="ghost"/>';
+
     }
 }
 
 var placeValue = function(index) {
     if ((gameBoard[index] == 0)) {
-      gameBoard[index] = "O";
+        gameBoard[index] = "O";
     }
     if (numOfturns % 2 == 0) {
-      gameBoard[index] = "X";
+        gameBoard[index] = "X";
     }
     boardOutput();
     checkWinner();
-    // checkDraw();
+    checkDraw();
 }
-
-// // checks draw // if board is full
-// var checkDraw = function() {
-//     if ((gameBoard[0] !== 0) && (gameBoard[1] !== 0) && (gameBoard[2] !== 0) && (gameBoard[3] !== 0) && (gameBoard[4] !== 0) && (gameBoard[5] !== 0) && (gameBoard[6] !== 0) && (gameBoard[7] !== 0) && (gameBoard[8] !== 0)) {
-//         console.log("It's a draw!")
-//     }
-// }
 
 // checks winner
 var checkWinner = function() {
     if ((winRow() == true) || (winColumn() == true) || (winDiagonal() == true)) {
-        return resultTextDOMelement.innerHTML = "Winner";
+        resultTextDOMelement.innerHTML = "You Win!";
+        // stops game play by disabling tiles
+        arrTileDOMelements.forEach(function(tile) {
+            tile.removeEventListener('click', placeMark);
+        })
+    }
+}
+
+//checks draw // if board is full
+var checkDraw = function() {
+    if ((gameBoard[0] !== 0) && (gameBoard[1] !== 0) && (gameBoard[2] !== 0) && (gameBoard[3] !== 0) && (gameBoard[4] !== 0) && (gameBoard[5] !== 0) && (gameBoard[6] !== 0) && (gameBoard[7] !== 0) && (gameBoard[8] !== 0)) {
+        resultTextDOMelement.innerHTML = "It's a draw!";
     }
 }
 
@@ -103,6 +108,7 @@ var winDiagonal = function() {
 var newGame = function() {
     for (var index = 0; index < gameBoard.length; index++) {
         gameBoard[index] = 0;
+        location.reload();
     }
     numOfturns = 0;
     boardOutput();
@@ -116,7 +122,8 @@ boardDOMelement.addEventListener('click', newGame);
 var tileDOMelements = document.getElementsByClassName('tile');
 var arrTileDOMelements = Array.prototype.slice.call(tileDOMelements)
 arrTileDOMelements.forEach(function(tile) {
-  tile.addEventListener('click', placeMark);
+    tile.addEventListener('click', placeMark);
 })
 
 var resultTextDOMelement = document.getElementById('result-text');
+resultTextDOMelement.className = "blink";
