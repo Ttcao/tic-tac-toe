@@ -6,11 +6,6 @@ var crossMark = "X";
 var noughtMark = "O";
 var numOfturns = 0;
 
-// show board output on console
-var boardOutput = function() {
-    console.log((gameBoard[0] + " " + gameBoard[1] + " " + gameBoard[2] + "\n" + gameBoard[3] + " " + gameBoard[4] + " " + gameBoard[5] + "\n" + gameBoard[6] + " " + gameBoard[7] + " " + gameBoard[8]));
-}
-
 // gameplay - places the mark on the board and alternates players
 var placeMark = function(event) {
     var clickedElement = event.target;
@@ -32,12 +27,11 @@ var placeValue = function(index) {
     if (numOfturns % 2 == 0) {
         gameBoard[index] = "X";
     }
-    boardOutput();
     checkWinner();
     checkDraw();
 }
 
-// checks winner
+// checks win
 var checkWinner = function() {
     if ((winRow() == true) || (winColumn() == true) || (winDiagonal() == true)) {
         resultTextDOMelement.innerHTML = "You Win!";
@@ -109,9 +103,12 @@ var newGame = function() {
     for (var index = 0; index < gameBoard.length; index++) {
         gameBoard[index] = 0;
         location.reload();
-    }
+      }
+    // resultTextDOMelement.innerHTML = "";
+    // arrTileDOMelements.forEach(function(tile) {
+    //     tile.innerHTML = "";
+    // })
     numOfturns = 0;
-    boardOutput();
 }
 
 // UI

@@ -4,6 +4,7 @@ body {
     background-repeat: no-repeat;
     background-position: center;
 }
+
 h1 {
     font-family: 'VT323', monospace;
     color: white;
@@ -11,6 +12,7 @@ h1 {
     text-align: center;
     margin: -50px;
 }
+
 .blink {
     color: white;
     font-size: 50px;
@@ -63,14 +65,19 @@ h1 {
         opacity: 1.0;
     }
 }
+
 #result-text {
     font-family: 'VT323', monospace;
     height: 100px;
     color: white;
 }
+
 img {
     height: 100%;
+    vertical-align: middle;
+    display: block;
 }
+
 #new-game {
     background-color: red;
     border: none;
@@ -83,58 +90,83 @@ img {
     font-size: 30px;
     font-family: 'VT323', monospace;
 }
+
 #game-board {
     padding: 20px;
     text-align: center;
 }
+
 #wrapper {
     display: inline-block;
     padding: 5px;
     border: 3px #33349e solid;
     background-color: black;
+    /*line-height: 0;*/
 }
+
 .tile {
     width: 120px;
     height: 120px;
     display: inline-block;
     /*border: 1px black solid;*/
 }
+
 #index-0 {
+    border-top: 3px #33349e solid;
     border-right: 5px white dotted;
     border-bottom: 5px white dotted;
+    border-left: 3px #33349e solid;
 }
+
 #index-1 {
+    border-top: 3px #33349e solid;
     border-right: 5px white dotted;
-    border-left: 5px white dotted;
     border-bottom: 5px white dotted;
+    border-left: 5px white dotted;
 }
+
 #index-2 {
-    border-left: 5px white dotted;
+    border-top: 3px #33349e solid;
+    border-right: 3px #33349e solid;
     border-bottom: 5px white dotted;
+    border-left: 5px white dotted;
 }
+
 #index-3 {
     border-top: 5px white dotted;
-    border-bottom: 5px white dotted;
     border-right: 5px white dotted;
+    border-bottom: 5px white dotted;
+    border-left: 3px #33349e solid;
 }
+
 #index-4 {
     border: 5px white dotted;
 }
+
 #index-5 {
     border-top: 5px white dotted;
-    border-left: 5px white dotted;
+    border-right: 3px #33349e solid;
     border-bottom: 5px white dotted;
+    border-left: 5px white dotted;
 }
+
 #index-6 {
     border-top: 5px white dotted;
     border-right: 5px white dotted;
+    border-bottom: 3px #33349e solid;
+    border-left: 3px #33349e solid;
 }
+
 #index-7 {
     border-top: 5px white dotted;
-    border-left: 5px white dotted;
     border-right: 5px white dotted;
+    border-bottom: 3px #33349e solid;
+    border-left: 5px white dotted;
 }
+
 #index-8 {
     border-top: 5px white dotted;
+    border-right: 3px #33349e solid;
+    border-bottom: 3px #33349e solid;
     border-left: 5px white dotted;
 }
