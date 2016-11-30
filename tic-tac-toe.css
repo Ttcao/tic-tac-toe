@@ -1,7 +1,26 @@
-.game-tile {
+.tile {
   width: 150px;
   height: 150px;
   border: 1px black solid;
   display: inline-block;
-
 }
+
+body {
+  text-align: center;
+}
+
+#game-board {
+  padding: 40px;
+}
+
+
+/*#index-0 {
+  border-left: 3px black solid;
+  border-bottom: 3px black solid;
+}
+
+#index-1 {
+  border-right: 3px black solid;
+  border-left: 3px black solid;
+  border-bottom: 3px black solid;
+}*/

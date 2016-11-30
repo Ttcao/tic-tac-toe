@@ -12,30 +12,41 @@ var boardOutput = function() {
 }
 
 // gameplay - places the mark on the board and alternates players
-var placeMark = function(index) {
-    if ((gameBoard[index] == 0)) {
-      gameBoard[index] = "X";
-      numOfturns ++;
+var placeMark = function(event) {
+    var clickedElement = event.target;
+    var index = clickedElement.getAttribute('value');
+    placeValue(index);
+    numOfturns++;
+    event.target.innerHTML = '<img src="images/X-mark.png" alt="X"/>';
+
+    if (numOfturns % 2 == 0) {
+      event.target.innerHTML = '<img src="images/O-mark.png" alt="O"/>';
     }
-    if (numOfturns %2 == 0) {
+}
+
+var placeValue = function(index) {
+    if ((gameBoard[index] == 0)) {
       gameBoard[index] = "O";
+    }
+    if (numOfturns % 2 == 0) {
+      gameBoard[index] = "X";
     }
     boardOutput();
     checkWinner();
-    checkDraw();
+    // checkDraw();
 }
 
-// checks draw // if board is full
-var checkDraw = function() {
-    if ((gameBoard[0] !== 0) && (gameBoard[1] !== 0) && (gameBoard[2] !== 0) && (gameBoard[3] !== 0) && (gameBoard[4] !== 0) && (gameBoard[5] !== 0) && (gameBoard[6] !== 0) && (gameBoard[7] !== 0) && (gameBoard[8] !== 0)) {
-        console.log("It's a draw!")
-    }
-}
+// // checks draw // if board is full
+// var checkDraw = function() {
+//     if ((gameBoard[0] !== 0) && (gameBoard[1] !== 0) && (gameBoard[2] !== 0) && (gameBoard[3] !== 0) && (gameBoard[4] !== 0) && (gameBoard[5] !== 0) && (gameBoard[6] !== 0) && (gameBoard[7] !== 0) && (gameBoard[8] !== 0)) {
+//         console.log("It's a draw!")
+//     }
+// }
 
 // checks winner
 var checkWinner = function() {
     if ((winRow() == true) || (winColumn() == true) || (winDiagonal() == true)) {
-        console.log("winner");
+        return resultTextDOMelement.innerHTML = "Winner";
     }
 }
 
@@ -96,3 +107,16 @@ var newGame = function() {
     numOfturns = 0;
     boardOutput();
 }
+
+// UI
+
+var boardDOMelement = document.getElementById('new-game');
+boardDOMelement.addEventListener('click', newGame);
+
+var tileDOMelements = document.getElementsByClassName('tile');
+var arrTileDOMelements = Array.prototype.slice.call(tileDOMelements)
+arrTileDOMelements.forEach(function(tile) {
+  tile.addEventListener('click', placeMark);
+})
+
+var resultTextDOMelement = document.getElementById('result-text');
