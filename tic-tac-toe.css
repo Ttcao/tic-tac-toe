@@ -108,7 +108,8 @@ img {
     width: 120px;
     height: 120px;
     display: inline-block;
-    /*border: 1px black solid;*/
+    border: 5px white dotted;
+
 }
 
 #index-0 {

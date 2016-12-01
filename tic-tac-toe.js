@@ -1,10 +1,53 @@
+var board = document.getElementById('game-board');
+var wrapper = document.getElementById('wrapper');
+
 // create the board
 var gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-
 // mark refers to player
 var crossMark = "X";
 var noughtMark = "O";
 var numOfturns = 0;
+
+// create board data structure
+
+
+var gameBoard = [];
+
+// creates the board - arrays of arrays
+var createBoard = function(){
+  var maxRow = 3;
+  var maxColumn = 3;
+  var startingValue = 0;
+  var emptyRow = [];
+  for (var i = 0; i < maxColumn; i++){
+    emptyRow.push(startingValue); // [0, 0, 0]
+  }
+  for (var j = 0; j < maxRow; j++){
+    gameBoard.push(emptyRow); // push one emptyRow into each row
+  }
+}
+
+
+//
+var renderBoard = function(){
+  var maxTiles = 3;
+  for (var i = 0; i < maxTiles; i++){
+    var rowElement = document.createElement('div');
+    // rowElement.setAttribute('data-value', );
+    rowElement.className = 'row';
+
+    for (var j = 0; j < maxTiles; j++) {
+      var tileElement = document.createElement('div');
+      tileElement.setAttribute('data-row', i);
+      tileElement.setAttribute('data-column', j);
+      tileElement.className = 'tile';
+      rowElement.appendChild(tileElement);
+    }
+    // row completed
+    wrapper.appendChild(rowElement);
+  }
+}
+
 
 // gameplay - places the mark on the board and alternates players
 var placeMark = function(event) {
@@ -29,22 +72,28 @@ var placeValue = function(index) {
     }
     if (numOfturns % 2 == 0) {
         gameBoard[index] = "X";
-
     }
     checkResult();
 }
 
 // checks win
 var checkResult = function() {
-    if ((winRow() == true) || (winColumn() == true) || (winDiagonal() == true)) {
-        resultTextDOMelement.innerHTML = "You Win!";
+    if ((winRowX() == true) || (winColumnX() == true) || (winDiagonalX() == true)) {
+        resultTextDOMelement.innerHTML = "PacMan Wins!";
+
+        // stops game play by disabling 'click' event listener on tiles
+        arrTileDOMelements.forEach(function(tile) {
+            tile.removeEventListener('click', placeMark);
+        })
+    } else if ((winRowO() == true) || (winColumnO() == true) || (winDiagonalO() == true)) {
+        resultTextDOMelement.innerHTML = "Blinky Wins!";
 
         // stops game play by disabling 'click' event listener on tiles
         arrTileDOMelements.forEach(function(tile) {
             tile.removeEventListener('click', placeMark);
         })
     } else {
-      checkDraw();
+        checkDraw();
     }
 }
 
@@ -55,51 +104,68 @@ var checkDraw = function() {
     }
 }
 
-var winRow = function() {
+var winRowX = function() {
     if ((gameBoard[0] === crossMark) && (gameBoard[1] === crossMark) && (gameBoard[2] === crossMark)) {
-        return true;
-    } else if ((gameBoard[0] === noughtMark) && (gameBoard[1] === noughtMark) && (gameBoard[2] === noughtMark)) {
         return true;
     }
     if ((gameBoard[3] === crossMark) && (gameBoard[4] === crossMark) && (gameBoard[5] === crossMark)) {
         return true;
-    } else if ((gameBoard[3] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[5] === noughtMark)) {
-        return true;
     }
     if ((gameBoard[6] === crossMark) && (gameBoard[7] === crossMark) && (gameBoard[8] === crossMark)) {
-        return true;
-    } else if ((gameBoard[6] === noughtMark) && (gameBoard[7] === noughtMark) && (gameBoard[8] === noughtMark)) {
         return true;
     }
 }
 
-var winColumn = function() {
-    if ((gameBoard[0] === crossMark) && (gameBoard[3] === crossMark) && (gameBoard[6] === crossMark)) {
+var winRowO = function() {
+    if ((gameBoard[0] === noughtMark) && (gameBoard[1] === noughtMark) && (gameBoard[2] === noughtMark)) {
         return true;
-    } else if ((gameBoard[0] === noughtMark) && (gameBoard[3] === noughtMark) && (gameBoard[6] === noughtMark)) {
+    }
+    if ((gameBoard[3] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[5] === noughtMark)) {
+        return true;
+    }
+    if ((gameBoard[6] === noughtMark) && (gameBoard[7] === noughtMark) && (gameBoard[8] === noughtMark)) {
+        return true;
+    }
+}
+
+var winColumnX = function() {
+    if ((gameBoard[0] === crossMark) && (gameBoard[3] === crossMark) && (gameBoard[6] === crossMark)) {
         return true;
     }
     if ((gameBoard[1] === crossMark) && (gameBoard[4] === crossMark) && (gameBoard[7] === crossMark)) {
         return true;
-    } else if ((gameBoard[1] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[7] === noughtMark)) {
-        return true;
     }
     if ((gameBoard[2] === crossMark) && (gameBoard[5] === crossMark) && (gameBoard[8] === crossMark)) {
-        return true;
-    } else if ((gameBoard[2] === noughtMark) && (gameBoard[5] === noughtMark) && (gameBoard[8] === noughtMark)) {
         return true;
     }
 }
 
-var winDiagonal = function() {
-    if ((gameBoard[0] === crossMark) && (gameBoard[4] === crossMark) && (gameBoard[8] === crossMark)) {
+var winColumnO = function() {
+    if ((gameBoard[0] === noughtMark) && (gameBoard[3] === noughtMark) && (gameBoard[6] === noughtMark)) {
         return true;
-    } else if ((gameBoard[0] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[8] === noughtMark)) {
+    }
+    if ((gameBoard[1] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[7] === noughtMark)) {
+        return true;
+    }
+    if ((gameBoard[2] === noughtMark) && (gameBoard[5] === noughtMark) && (gameBoard[8] === noughtMark)) {
+        return true;
+    }
+}
+
+var winDiagonalX = function() {
+    if ((gameBoard[0] === crossMark) && (gameBoard[4] === crossMark) && (gameBoard[8] === crossMark)) {
         return true;
     }
     if ((gameBoard[2] === crossMark) && (gameBoard[4] === crossMark) && (gameBoard[6] === crossMark)) {
         return true;
-    } else if ((gameBoard[2] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[6] === noughtMark)) {
+    }
+}
+
+var winDiagonalO = function() {
+    if ((gameBoard[0] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[8] === noughtMark)) {
+        return true;
+    }
+    if ((gameBoard[2] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[6] === noughtMark)) {
         return true;
     }
 }
@@ -107,12 +173,12 @@ var winDiagonal = function() {
 // resets the board
 var newGame = function() {
     for (var index = 0; index < gameBoard.length; index++) {
-        gameBoard[index] = null;
+        // gameBoard[index] = null;
         location.reload();
-      }
+    }
     // resultTextDOMelement.innerHTML = "";
     // arrTileDOMelements.forEach(function(tile) {
-    //     tile.innerHTML = "";
+    //     tile = undefined;
     // })
     numOfturns = 0;
 }
