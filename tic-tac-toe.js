@@ -1,19 +1,20 @@
-var board = document.getElementById('game-board');
-var wrapper = document.getElementById('wrapper');
+// var board = document.getElementById('game-board');
+var wrapperDOMelement = document.getElementById('wrapper');
 
-// create the board
-var gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 // mark refers to player
 var crossMark = "X";
 var noughtMark = "O";
 var numOfturns = 0;
 
-// create board data structure
+// game state
+var gameOver = false;
+var currentPlayer = true;
 
-
+// create gameboard data structure
 var gameBoard = [];
 
-// creates the board - arrays of arrays
+// board = new Array();
+
 var createBoard = function(){
   var maxRow = 3;
   var maxColumn = 3;
@@ -27,8 +28,7 @@ var createBoard = function(){
   }
 }
 
-
-//
+// creates board in UI
 var renderBoard = function(){
   var maxTiles = 3;
   for (var i = 0; i < maxTiles; i++){
@@ -41,59 +41,68 @@ var renderBoard = function(){
       tileElement.setAttribute('data-row', i);
       tileElement.setAttribute('data-column', j);
       tileElement.className = 'tile';
+      tileElement.addEventListener('click', placeMark);
       rowElement.appendChild(tileElement);
     }
-    // row completed
-    wrapper.appendChild(rowElement);
+    // rows with tiles have been created to append to wrapper - UI.
+    wrapperDOMelement.appendChild(rowElement);
   }
 }
-
 
 // gameplay - places the mark on the board and alternates players
 var placeMark = function(event) {
     var clickedElement = event.target;
     //disables click event listener of target
     clickedElement.removeEventListener('click', placeMark);
-    var index = clickedElement.getAttribute('value');
-
-    placeValue(index);
+    var indexRow = clickedElement.getAttribute('data-row');
+    var indexColumn = clickedElement.getAttribute('data-column');
+    // placeValue(indexRow, indexColumn);
 
     numOfturns++;
-    event.target.innerHTML = '<img src="images/pacman.png" alt="pacman"/>';
+    if (numOfturns % 2 !== 0){
+      console.log(event.target);
+      gameBoard[indexRow][indexColumn] = "X";
+      event.target.innerHTML = '<img src="images/pacman.png" alt="pacman"/>';
+    }
 
-    if (numOfturns % 2 == 0) {
+    else if (numOfturns % 2 == 0) {
+        console.log(event.target);
+        gameBoard[indexRow][indexColumn] = "O";
         event.target.innerHTML = '<img src="images/ghost.png" alt="ghost"/>';
     }
+  checkResult();
 }
 
-var placeValue = function(index) {
-    if ((gameBoard[index] == 0)) {
-        gameBoard[index] = "O";
-    }
-    if (numOfturns % 2 == 0) {
-        gameBoard[index] = "X";
-    }
-    checkResult();
-}
+// var placeValue = function(indexRow, indexColumn) {
+//     if ((numOfturns % 2 !== 0)) {
+//         gameBoard[indexRow][indexColumn] = "O";
+//         // gameBoard[i][j] = gameBoard[indexRow][indexColumn]
+//     }
+//     if (numOfturns % 2 == 0) {
+//         gameBoard[indexRow][indexColumn] = "X";
+//     }
+//     checkResult();
+// }
 
 // checks win
 var checkResult = function() {
-    if ((winRowX() == true) || (winColumnX() == true) || (winDiagonalX() == true)) {
+    if ((winRow() == true) || (winColumn() == true) || (winDiagonal() == true)) {
         resultTextDOMelement.innerHTML = "PacMan Wins!";
+        gameOver !== false;
 
         // stops game play by disabling 'click' event listener on tiles
         arrTileDOMelements.forEach(function(tile) {
             tile.removeEventListener('click', placeMark);
         })
-    } else if ((winRowO() == true) || (winColumnO() == true) || (winDiagonalO() == true)) {
-        resultTextDOMelement.innerHTML = "Blinky Wins!";
+    // } else if ((winRowO() == true) || (winColumnO() == true) || (winDiagonalO() == true)) {
+    //     resultTextDOMelement.innerHTML = "Blinky Wins!";
 
         // stops game play by disabling 'click' event listener on tiles
         arrTileDOMelements.forEach(function(tile) {
             tile.removeEventListener('click', placeMark);
         })
-    } else {
-        checkDraw();
+    // } else {
+    //     checkDraw();
     }
 }
 
@@ -104,71 +113,71 @@ var checkDraw = function() {
     }
 }
 
-var winRowX = function() {
-    if ((gameBoard[0] === crossMark) && (gameBoard[1] === crossMark) && (gameBoard[2] === crossMark)) {
+var winRow = function() {
+    if ((gameBoard[0][0] === gameBoard[0][1] === gameBoard[0][2])) {
         return true;
     }
-    if ((gameBoard[3] === crossMark) && (gameBoard[4] === crossMark) && (gameBoard[5] === crossMark)) {
+    if ((gameBoard[1][0] === gameBoard[1][1] === gameBoard[1][0])) {
         return true;
     }
-    if ((gameBoard[6] === crossMark) && (gameBoard[7] === crossMark) && (gameBoard[8] === crossMark)) {
-        return true;
-    }
-}
-
-var winRowO = function() {
-    if ((gameBoard[0] === noughtMark) && (gameBoard[1] === noughtMark) && (gameBoard[2] === noughtMark)) {
-        return true;
-    }
-    if ((gameBoard[3] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[5] === noughtMark)) {
-        return true;
-    }
-    if ((gameBoard[6] === noughtMark) && (gameBoard[7] === noughtMark) && (gameBoard[8] === noughtMark)) {
+    if ((gameBoard[2][0] === gameBoard[2][1] === gameBoard[2][0])) {
         return true;
     }
 }
 
-var winColumnX = function() {
-    if ((gameBoard[0] === crossMark) && (gameBoard[3] === crossMark) && (gameBoard[6] === crossMark)) {
+// var winRowO = function() {
+//     if ((gameBoard[0] === noughtMark) && (gameBoard[1] === noughtMark) && (gameBoard[2] === noughtMark)) {
+//         return true;
+//     }
+//     if ((gameBoard[3] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[5] === noughtMark)) {
+//         return true;
+//     }
+//     if ((gameBoard[6] === noughtMark) && (gameBoard[7] === noughtMark) && (gameBoard[8] === noughtMark)) {
+//         return true;
+//     }
+// }
+
+var winColumn = function() {
+    if ((gameBoard[0][0] === gameBoard[1][0] === gameBoard[2][0])) {
         return true;
     }
-    if ((gameBoard[1] === crossMark) && (gameBoard[4] === crossMark) && (gameBoard[7] === crossMark)) {
+    if ((gameBoard[0][1] === gameBoard[1][1] === gameBoard[2][1])) {
         return true;
     }
-    if ((gameBoard[2] === crossMark) && (gameBoard[5] === crossMark) && (gameBoard[8] === crossMark)) {
+    if ((gameBoard[0][2] === gameBoard[1][2] === gameBoard[2][2])) {
         return true;
     }
 }
 
-var winColumnO = function() {
-    if ((gameBoard[0] === noughtMark) && (gameBoard[3] === noughtMark) && (gameBoard[6] === noughtMark)) {
+// var winColumnO = function() {
+//     if ((gameBoard[0] === noughtMark) && (gameBoard[3] === noughtMark) && (gameBoard[6] === noughtMark)) {
+//         return true;
+//     }
+//     if ((gameBoard[1] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[7] === noughtMark)) {
+//         return true;
+//     }
+//     if ((gameBoard[2] === noughtMark) && (gameBoard[5] === noughtMark) && (gameBoard[8] === noughtMark)) {
+//         return true;
+//     }
+// }
+
+var winDiagonal = function() {
+    if ((gameBoard[0][0] === gameBoard[1][1] === gameBoard[2][2])) {
         return true;
     }
-    if ((gameBoard[1] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[7] === noughtMark)) {
-        return true;
-    }
-    if ((gameBoard[2] === noughtMark) && (gameBoard[5] === noughtMark) && (gameBoard[8] === noughtMark)) {
+    if ((gameBoard[0][2] === gameBoard[1][1] === gameBoard[0][2])) {
         return true;
     }
 }
 
-var winDiagonalX = function() {
-    if ((gameBoard[0] === crossMark) && (gameBoard[4] === crossMark) && (gameBoard[8] === crossMark)) {
-        return true;
-    }
-    if ((gameBoard[2] === crossMark) && (gameBoard[4] === crossMark) && (gameBoard[6] === crossMark)) {
-        return true;
-    }
-}
-
-var winDiagonalO = function() {
-    if ((gameBoard[0] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[8] === noughtMark)) {
-        return true;
-    }
-    if ((gameBoard[2] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[6] === noughtMark)) {
-        return true;
-    }
-}
+// var winDiagonalO = function() {
+//     if ((gameBoard[0] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[8] === noughtMark)) {
+//         return true;
+//     }
+//     if ((gameBoard[2] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[6] === noughtMark)) {
+//         return true;
+//     }
+// }
 
 // resets the board
 var newGame = function() {
@@ -196,3 +205,6 @@ arrTileDOMelements.forEach(function(tile) {
 
 var resultTextDOMelement = document.getElementById('result-text');
 resultTextDOMelement.className = "blink";
+
+createBoard();
+renderBoard();

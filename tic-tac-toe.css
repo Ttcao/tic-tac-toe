@@ -101,7 +101,7 @@ img {
     padding: 5px;
     border: 3px #33349e solid;
     background-color: black;
-    /*line-height: 0;*/
+    line-height: 0;
 }
 
 .tile {
