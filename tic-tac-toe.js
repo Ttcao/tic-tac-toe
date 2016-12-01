@@ -9,14 +9,17 @@ var numOfturns = 0;
 // gameplay - places the mark on the board and alternates players
 var placeMark = function(event) {
     var clickedElement = event.target;
+    //disables click event listener of target
+    clickedElement.removeEventListener('click', placeMark);
     var index = clickedElement.getAttribute('value');
+
     placeValue(index);
+
     numOfturns++;
     event.target.innerHTML = '<img src="images/pacman.png" alt="pacman"/>';
 
     if (numOfturns % 2 == 0) {
         event.target.innerHTML = '<img src="images/ghost.png" alt="ghost"/>';
-
     }
 }
 
@@ -27,22 +30,24 @@ var placeValue = function(index) {
     if (numOfturns % 2 == 0) {
         gameBoard[index] = "X";
     }
-    checkWinner();
-    checkDraw();
+    checkResult();
 }
 
 // checks win
-var checkWinner = function() {
+var checkResult = function() {
     if ((winRow() == true) || (winColumn() == true) || (winDiagonal() == true)) {
         resultTextDOMelement.innerHTML = "You Win!";
-        // stops game play by disabling tiles
+
+        // stops game play by disabling 'click' event listener on tiles
         arrTileDOMelements.forEach(function(tile) {
             tile.removeEventListener('click', placeMark);
         })
+    } else {
+      checkDraw();
     }
 }
 
-//checks draw // if board is full
+// //checks draw // if board is full
 var checkDraw = function() {
     if ((gameBoard[0] !== 0) && (gameBoard[1] !== 0) && (gameBoard[2] !== 0) && (gameBoard[3] !== 0) && (gameBoard[4] !== 0) && (gameBoard[5] !== 0) && (gameBoard[6] !== 0) && (gameBoard[7] !== 0) && (gameBoard[8] !== 0)) {
         resultTextDOMelement.innerHTML = "It's a draw!";
