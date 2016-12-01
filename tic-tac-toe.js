@@ -29,6 +29,7 @@ var placeValue = function(index) {
     }
     if (numOfturns % 2 == 0) {
         gameBoard[index] = "X";
+
     }
     checkResult();
 }
@@ -106,7 +107,7 @@ var winDiagonal = function() {
 // resets the board
 var newGame = function() {
     for (var index = 0; index < gameBoard.length; index++) {
-        gameBoard[index] = 0;
+        gameBoard[index] = null;
         location.reload();
       }
     // resultTextDOMelement.innerHTML = "";
