@@ -1,32 +1,31 @@
-// var board = document.getElementById('game-board');
-var wrapperDOMelement = document.getElementById('wrapper');
 
-// mark refers to player
-var crossMark = "X";
-var noughtMark = "O";
 var numOfturns = 0;
-
-// game state
-var gameOver = false;
-var currentPlayer = true;
+var p1ScoreTotal= 0;
+var p2ScoreTotal = 0;
 
 // create gameboard data structure
-var gameBoard = [];
-
-// board = new Array();
-
+// [Array[maxColumn], Array[maxColumn], Array[maxColumn]]
 var createBoard = function(){
   var maxRow = 3;
   var maxColumn = 3;
-  var startingValue = 0;
-  var emptyRow = [];
-  for (var i = 0; i < maxColumn; i++){
-    emptyRow.push(startingValue); // [0, 0, 0]
+  var emptyRow = new Array(maxColumn);
+
+  // gameBoard has maxRow (3) number of rows
+  gameBoard = new Array(maxRow);
+
+  // Each row contains maxColumn (3) number of tiles
+  for (var i = 0; i < maxRow; i++){
+    gameBoard[i] = new Array(maxColumn);
   }
-  for (var j = 0; j < maxRow; j++){
-    gameBoard.push(emptyRow); // push one emptyRow into each row
+
+  // At this point each element is undefined
+  for (var i = 0; i < maxRow; i++){
+    for (var j = 0; j < maxColumn; j++){
+        gameBoard[i][j] = "";
+    }
   }
 }
+
 
 // creates board in UI
 var renderBoard = function(){
@@ -51,6 +50,7 @@ var renderBoard = function(){
 
 // gameplay - places the mark on the board and alternates players
 var placeMark = function(event) {
+
     var clickedElement = event.target;
     //disables click event listener of target
     clickedElement.removeEventListener('click', placeMark);
@@ -61,150 +61,139 @@ var placeMark = function(event) {
     numOfturns++;
     if (numOfturns % 2 !== 0){
       console.log(event.target);
-      gameBoard[indexRow][indexColumn] = "X";
+      gameBoard[indexRow][indexColumn] = "Player-One";
       event.target.innerHTML = '<img src="images/pacman.png" alt="pacman"/>';
     }
 
     else if (numOfturns % 2 == 0) {
         console.log(event.target);
-        gameBoard[indexRow][indexColumn] = "O";
+        gameBoard[indexRow][indexColumn] = "Player-Two";
         event.target.innerHTML = '<img src="images/ghost.png" alt="ghost"/>';
     }
   checkResult();
 }
 
-// var placeValue = function(indexRow, indexColumn) {
-//     if ((numOfturns % 2 !== 0)) {
-//         gameBoard[indexRow][indexColumn] = "O";
-//         // gameBoard[i][j] = gameBoard[indexRow][indexColumn]
-//     }
-//     if (numOfturns % 2 == 0) {
-//         gameBoard[indexRow][indexColumn] = "X";
-//     }
-//     checkResult();
-// }
-
 // checks win
 var checkResult = function() {
-    if ((winRow() == true) || (winColumn() == true) || (winDiagonal() == true)) {
+    if ((winRowP1() == true) || (winColumnP1() == true) || (winDiagonalP1() == true)) {
+        p1ScoreTotal ++
         resultTextDOMelement.innerHTML = "PacMan Wins!";
-        gameOver !== false;
+        p1Score.innerHTML = p1ScoreTotal;
+        // // stops game play by disabling 'click' event listener on tiles
+        // arrTileDOMelements.forEach(function(tile) {
+        //     tile.removeEventListener('click', placeMark);
+        // })
+
+    } else if ((winRowP2() == true) || (winColumnP2() == true) || (winDiagonalP2() == true)) {
+        p2ScoreTotal ++
+        resultTextDOMelement.innerHTML = "Blinky Wins!";
+        p2Score.innerHTML = p2ScoreTotal;
 
         // stops game play by disabling 'click' event listener on tiles
-        arrTileDOMelements.forEach(function(tile) {
-            tile.removeEventListener('click', placeMark);
-        })
-    // } else if ((winRowO() == true) || (winColumnO() == true) || (winDiagonalO() == true)) {
-    //     resultTextDOMelement.innerHTML = "Blinky Wins!";
+        // arrTileDOMelements.forEach(function(tile) {
+        //     tile.removeEventListener('click', placeMark);
+        // })
 
-        // stops game play by disabling 'click' event listener on tiles
-        arrTileDOMelements.forEach(function(tile) {
-            tile.removeEventListener('click', placeMark);
-        })
-    // } else {
-    //     checkDraw();
+    } else {
+        checkDraw();
     }
 }
 
 // //checks draw // if board is full
 var checkDraw = function() {
-    if ((gameBoard[0] !== 0) && (gameBoard[1] !== 0) && (gameBoard[2] !== 0) && (gameBoard[3] !== 0) && (gameBoard[4] !== 0) && (gameBoard[5] !== 0) && (gameBoard[6] !== 0) && (gameBoard[7] !== 0) && (gameBoard[8] !== 0)) {
+    if ((gameBoard[0][0] !== "") && (gameBoard[0][1] !== "") && (gameBoard[0][2] !== "") && (gameBoard[1][0] !== "") && (gameBoard[1][1] !== "") && (gameBoard[1][2] !== "") && (gameBoard[2][0] !== "") && (gameBoard[2][1] !== "") && (gameBoard[2][2] !== "")) {
         resultTextDOMelement.innerHTML = "It's a draw!";
     }
 }
 
-var winRow = function() {
-    if ((gameBoard[0][0] === gameBoard[0][1] === gameBoard[0][2])) {
+var winRowP1 = function() {
+    if ((gameBoard[0][0] === "Player-One") && (gameBoard[0][1] === "Player-One") && (gameBoard[0][2] === "Player-One")) {
         return true;
     }
-    if ((gameBoard[1][0] === gameBoard[1][1] === gameBoard[1][0])) {
+    if ((gameBoard[1][0] === "Player-One") && (gameBoard[1][1] === "playerOne") && (gameBoard[1][2] === "Player-One")) {
         return true;
     }
-    if ((gameBoard[2][0] === gameBoard[2][1] === gameBoard[2][0])) {
-        return true;
-    }
-}
-
-// var winRowO = function() {
-//     if ((gameBoard[0] === noughtMark) && (gameBoard[1] === noughtMark) && (gameBoard[2] === noughtMark)) {
-//         return true;
-//     }
-//     if ((gameBoard[3] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[5] === noughtMark)) {
-//         return true;
-//     }
-//     if ((gameBoard[6] === noughtMark) && (gameBoard[7] === noughtMark) && (gameBoard[8] === noughtMark)) {
-//         return true;
-//     }
-// }
-
-var winColumn = function() {
-    if ((gameBoard[0][0] === gameBoard[1][0] === gameBoard[2][0])) {
-        return true;
-    }
-    if ((gameBoard[0][1] === gameBoard[1][1] === gameBoard[2][1])) {
-        return true;
-    }
-    if ((gameBoard[0][2] === gameBoard[1][2] === gameBoard[2][2])) {
+    if ((gameBoard[2][0] === "Player-One") && (gameBoard[2][1] === "Player-One")  && (gameBoard[2][2] === "Player-One")) {
         return true;
     }
 }
 
-// var winColumnO = function() {
-//     if ((gameBoard[0] === noughtMark) && (gameBoard[3] === noughtMark) && (gameBoard[6] === noughtMark)) {
-//         return true;
-//     }
-//     if ((gameBoard[1] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[7] === noughtMark)) {
-//         return true;
-//     }
-//     if ((gameBoard[2] === noughtMark) && (gameBoard[5] === noughtMark) && (gameBoard[8] === noughtMark)) {
-//         return true;
-//     }
-// }
+var winRowP2 = function() {
+  if ((gameBoard[0][0] === "Player-Two") && (gameBoard[0][1] === "Player-Two") && (gameBoard[0][2] === "Player-Two")) {
+      return true;
+  }
+  if ((gameBoard[1][0] === "Player-Two") && (gameBoard[1][1] === "Player-Two") && (gameBoard[1][2] === "Player-Two")) {
+      return true;
+  }
+  if ((gameBoard[2][0] === "Player-Two") && (gameBoard[2][1] === "Player-Two")  && (gameBoard[2][2] === "Player-Two")) {
+      return true;
+  }
+}
 
-var winDiagonal = function() {
-    if ((gameBoard[0][0] === gameBoard[1][1] === gameBoard[2][2])) {
+var winColumnP1 = function() {
+    if ((gameBoard[0][0] === "Player-One") && (gameBoard[1][0] === "Player-One") && (gameBoard[2][0] === "Player-One")) {
         return true;
     }
-    if ((gameBoard[0][2] === gameBoard[1][1] === gameBoard[0][2])) {
+    if ((gameBoard[0][1] === "Player-One") && (gameBoard[1][1] === "Player-One") && (gameBoard[2][1] === "Player-One")) {
+        return true;
+    }
+    if ((gameBoard[0][2] === "Player-One") && (gameBoard[1][2] === "Player-One") && (gameBoard[2][2] === "Player-One")) {
         return true;
     }
 }
 
-// var winDiagonalO = function() {
-//     if ((gameBoard[0] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[8] === noughtMark)) {
-//         return true;
-//     }
-//     if ((gameBoard[2] === noughtMark) && (gameBoard[4] === noughtMark) && (gameBoard[6] === noughtMark)) {
-//         return true;
-//     }
-// }
+var winColumnP2= function() {
+  if ((gameBoard[0][0] === "Player-Two") && (gameBoard[1][0] === "Player-Two") && (gameBoard[2][0] === "Player-Two")) {
+      return true;
+  }
+  if ((gameBoard[0][1] === "Player-Two") && (gameBoard[1][1] === "Player-Two") && (gameBoard[2][1] === "Player-Two")) {
+      return true;
+  }
+  if ((gameBoard[0][2] === "Player-Two") && (gameBoard[1][2] === "Player-Two") && (gameBoard[2][2] === "Player-Two")) {
+      return true;
+  }
+}
 
-// resets the board
+var winDiagonalP1 = function() {
+    if ((gameBoard[0][0] === "Player-One") && (gameBoard[1][1] === "Player-One") && (gameBoard[2][2] === "Player-One")) {
+        return true;
+    }
+    if ((gameBoard[0][2] === "Player-One") && (gameBoard[1][1] === "Player-One") && (gameBoard[2][0] === "Player-One")) {
+        return true;
+    }
+}
+
+var winDiagonalP2 = function() {
+  if ((gameBoard[0][0] === "Player-Two") && (gameBoard[1][1] === "Player-Two") && (gameBoard[2][2] === "Player-Two")) {
+      return true;
+  }
+  if ((gameBoard[0][2] === "Player-Two") && (gameBoard[1][1] === "Player-Two") && (gameBoard[2][0] === "Player-Two")) {
+      return true;
+  }
+}
+
+// resets the game
 var newGame = function() {
-    for (var index = 0; index < gameBoard.length; index++) {
-        // gameBoard[index] = null;
-        location.reload();
+        numOfturns = 0;
+        wrapperDOMelement.innerHTML = createBoard();
+        resultTextDOMelement.innerHTML = "";
+        renderBoard();
     }
-    // resultTextDOMelement.innerHTML = "";
-    // arrTileDOMelements.forEach(function(tile) {
-    //     tile = undefined;
-    // })
-    numOfturns = 0;
-}
 
-// UI
+var newGameDOM = document.getElementById('new-game');
+newGameDOM.addEventListener('click', newGame);
 
-var boardDOMelement = document.getElementById('new-game');
-boardDOMelement.addEventListener('click', newGame);
-
-var tileDOMelements = document.getElementsByClassName('tile');
-var arrTileDOMelements = Array.prototype.slice.call(tileDOMelements)
-arrTileDOMelements.forEach(function(tile) {
-    tile.addEventListener('click', placeMark);
-})
+// var board = document.getElementById('game-board');
+var wrapperDOMelement = document.getElementById('wrapper');
 
 var resultTextDOMelement = document.getElementById('result-text');
 resultTextDOMelement.className = "blink";
+
+var p1Score = document.getElementById('p1-score');
+p1Score.className = "score";
+
+var p2Score = document.getElementById('p2-score');
+p2Score .className = "score";
 
 createBoard();
 renderBoard();

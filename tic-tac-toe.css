@@ -13,6 +13,40 @@ h1 {
     margin: -50px;
 }
 
+#game-board {
+  display: block;
+  margin-right: 178px;
+}
+
+#score-board {
+  display: inline-block;
+  float: left;
+  border: 6px #33349e double;
+  width: 160px;
+  padding: 0 10px;
+  border-radius: 10px;
+}
+
+.score {
+  font-family: 'VT323', monospace;
+  color: white;
+  font-size: 30px;
+  text-align: right;
+}
+
+h3 {
+  font-family: 'VT323', monospace;
+  color: white;
+  font-size: 40px;
+}
+
+p {
+  font-family: 'VT323', monospace;
+  color: white;
+  font-size: 30px;
+  text-align: left;
+}
+
 .blink {
     color: white;
     font-size: 50px;
