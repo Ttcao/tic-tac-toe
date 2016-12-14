@@ -27,11 +27,11 @@ h1 {
   border-radius: 10px;
 }
 
-.score {
+p .score {
   font-family: 'VT323', monospace;
   color: white;
   font-size: 30px;
-  text-align: right;
+  text-align: left;
 }
 
 h3 {
